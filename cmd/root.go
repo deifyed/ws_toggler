@@ -44,7 +44,7 @@ var rootCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fs := afero.Afero{Fs: afero.NewOsFs()}
 
-		workspaceClient := sway.NewWaylandClient(logger)
+		workspaceClient := sway.NewWorkspaceClient(logger)
 		stateClient := filesystem.NewFilesystemStateClient(logger, &fs, defaultStatePath)
 
 		moveTo := generateMoveFunction(stateClient, workspaceClient)

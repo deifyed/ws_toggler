@@ -52,7 +52,7 @@ func (c client) SetFocusedWorkspace(target string) error {
 	return nil
 }
 
-func NewWaylandClient(logger *logrus.Logger) workspace.Client {
+func NewWorkspaceClient(logger *logrus.Logger) workspace.Client {
 	return &client{
 		logger: logger,
 	}
