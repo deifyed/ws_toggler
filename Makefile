@@ -184,3 +184,16 @@ test-coverage: fmt lint test-coverage-tools
 	@$(GOCOVMERGE) $(COVERAGE_DIR)/coverage/*.cover > $(COVERAGE_PROFILE)
 	@$(GO) tool cover -html=$(COVERAGE_PROFILE) -o $(COVERAGE_HTML)
 	@$(GOCOV) convert $(COVERAGE_PROFILE) | $(GOCOVXML) > $(COVERAGE_XML)
+
+INSTALL_DIR=~/.local/bin
+
+install:
+	mkdir -p ${INSTALL_DIR}
+	mkdir -p ${BUILD_DIR}
+
+	go build -o ${BUILD_DIR}/wstoggler .
+
+	cp ${BUILD_DIR}/wstoggler ${INSTALL_DIR}/wstoggler
+
+clean:
+	rm -r ./build/
