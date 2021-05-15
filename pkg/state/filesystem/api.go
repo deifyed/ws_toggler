@@ -33,7 +33,7 @@ func (c client) GetPreviousWorkspace(defaultWorkspace string) (string, error) {
 
 	fState := fileState{}
 
-	err = json.Unmarshal(raw, &fState)
+	err = json.Unmarshal(heal(raw), &fState)
 	if err != nil {
 		return "", fmt.Errorf("unmarshalling state file: %w", err)
 	}
