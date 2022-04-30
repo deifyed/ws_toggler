@@ -39,6 +39,16 @@ func (c Toggle) Back() error {
 		return fmt.Errorf("retrieving previous workspace: %w", err)
 	}
 
+	currentWorkspace, err := c.WorkspaceClient.GetFocusedWorkspace()
+	if err != nil {
+		return fmt.Errorf("retrieving current workspace: %w", err)
+	}
+
+	err = c.StateClient.StorePreviousWorkspace(currentWorkspace)
+	if err != nil {
+		return fmt.Errorf("storing current namespace: %w", err)
+	}
+
 	err = c.WorkspaceClient.SetFocusedWorkspace(previousWorkspace)
 	if err != nil {
 		return fmt.Errorf("setting focused namespace: %w", err)
