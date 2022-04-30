@@ -44,7 +44,7 @@ var (
 				Level: logrus.DebugLevel,
 			}
 
-			rootCmdOpts.fs = &afero.Afero{Fs: afero.NewMemMapFs()}
+			rootCmdOpts.fs = &afero.Afero{Fs: afero.NewOsFs()}
 
 			return nil
 		},
