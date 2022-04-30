@@ -11,8 +11,6 @@ import (
 	"github.com/deifyed/wstoggler/pkg/workspace"
 )
 
-const DefaultWorkspace = "1"
-
 func (c client) GetFocusedWorkspace() (string, error) {
 	raw, err := exec.Command("swaymsg", "-t", "get_workspaces", "-r").Output()
 	if err != nil {
@@ -50,6 +48,10 @@ func (c client) SetFocusedWorkspace(target string) error {
 	}
 
 	return nil
+}
+
+func (c client) GetDefaultWorkspace() string {
+	return "1"
 }
 
 func NewWorkspaceClient(logger *logrus.Logger) workspace.Client {
