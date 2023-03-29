@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/user"
+	"path"
 
 	"github.com/deifyed/wstoggler/pkg/toggling"
 
@@ -15,8 +17,8 @@ import (
 )
 
 const (
-	defaultStatePath = "/tmp/wstoggler.state"
-	defaultLogPath   = "/tmp/wstoggler.log"
+	defaultStateFilename = "wstoggler.state"
+	defaultLogFilename   = "wstoggler.log"
 )
 
 type rootCmdOptions struct {
@@ -31,7 +33,14 @@ var (
 		Short: "Returns to previous workspace when set",
 		Args:  cobra.MaximumNArgs(1),
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			logFile, err := os.OpenFile(defaultLogPath, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0o644)
+			user, err := user.Current()
+			if err != nil {
+				return fmt.Errorf("getting current user: %w", err)
+			}
+
+			logfilePath := path.Join(os.TempDir(), fmt.Sprintf("%s-%s", user.Username, defaultLogFilename))
+
+			logFile, err := os.OpenFile(logfilePath, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0o644)
 			if err != nil {
 				return fmt.Errorf("opening log file: %w", err)
 			}
@@ -49,13 +58,20 @@ var (
 			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
+			user, err := user.Current()
+			if err != nil {
+				return fmt.Errorf("getting current user: %w", err)
+			}
+
+			stateFilePath := path.Join(os.TempDir(), fmt.Sprintf("%s-%s", user.Username, defaultStateFilename))
+
 			toggle := toggling.Toggle{
 				Logger:          rootCmdOpts.logger,
 				WorkspaceClient: sway.NewWorkspaceClient(rootCmdOpts.logger),
 				StateClient: filesystem.NewFilesystemStateClient(
 					rootCmdOpts.logger,
 					rootCmdOpts.fs,
-					defaultStatePath,
+					stateFilePath,
 				),
 			}
 
