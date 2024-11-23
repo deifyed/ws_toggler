@@ -1,4 +1,4 @@
-package sway
+package hyprland
 
 import "github.com/sirupsen/logrus"
 
