@@ -23,6 +23,10 @@ var (
 	}
 )
 
+func init() {
+	rootCmd.Flags().StringVarP(&rootCmdOpts.WorkspaceBackend, "backend", "b", "sway", "Workspace backend to use (sway, hypr)")
+}
+
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		rootCmdOpts.Logger.Errorf(err.Error())

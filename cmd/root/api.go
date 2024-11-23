@@ -8,6 +8,8 @@ import (
 
 	"github.com/deifyed/wstoggler/pkg/state/filesystem"
 	"github.com/deifyed/wstoggler/pkg/toggling"
+	"github.com/deifyed/wstoggler/pkg/workspace"
+	"github.com/deifyed/wstoggler/pkg/workspace/hyprland"
 	"github.com/deifyed/wstoggler/pkg/workspace/sway"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -27,9 +29,15 @@ func RunE(opts *RootCmdOptions) func(cmd *cobra.Command, args []string) error {
 
 		stateFilePath := path.Join(os.TempDir(), fmt.Sprintf("%s-%s", user.Username, defaultStateFilename))
 
+		var workspaceBackend workspace.Client = sway.NewWorkspaceClient(opts.Logger)
+
+		if opts.WorkspaceBackend == "hypr" {
+			workspaceBackend = hyprland.NewWorkspaceClient(opts.Logger)
+		}
+
 		toggle := toggling.Toggle{
 			Logger:          opts.Logger,
-			WorkspaceClient: sway.NewWorkspaceClient(opts.Logger),
+			WorkspaceClient: workspaceBackend,
 			StateClient: filesystem.NewFilesystemStateClient(
 				opts.Logger,
 				opts.Fs,
