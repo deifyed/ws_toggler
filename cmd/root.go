@@ -4,12 +4,17 @@ import (
 	"os"
 
 	"github.com/deifyed/wstoggler/cmd/root"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 )
 
 var (
-	rootCmdOpts = root.RootCmdOptions{}
-	rootCmd     = &cobra.Command{
+	rootCmdOpts = root.RootCmdOptions{
+		Logger: logrus.StandardLogger(),
+		Fs:     &afero.Afero{Fs: afero.NewOsFs()},
+	}
+	rootCmd = &cobra.Command{
 		Use:     "wstoggler",
 		Short:   "Returns to previous workspace when set",
 		Args:    cobra.MaximumNArgs(1),

@@ -10,7 +10,6 @@ import (
 	"github.com/deifyed/wstoggler/pkg/toggling"
 	"github.com/deifyed/wstoggler/pkg/workspace/sway"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 )
 
@@ -73,8 +72,6 @@ func PreRunE(opts *RootCmdOptions) func(cmd *cobra.Command, args []string) error
 			},
 			Level: logrus.DebugLevel,
 		}
-
-		opts.Fs = &afero.Afero{Fs: afero.NewOsFs()}
 
 		return nil
 	}
