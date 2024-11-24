@@ -29,10 +29,15 @@ func RunE(opts *RootCmdOptions) func(cmd *cobra.Command, args []string) error {
 
 		stateFilePath := path.Join(os.TempDir(), fmt.Sprintf("%s-%s", user.Username, defaultStateFilename))
 
-		var workspaceBackend workspace.Client = sway.NewWorkspaceClient(opts.Logger)
+		var workspaceBackend workspace.Client
 
-		if opts.WorkspaceBackend == "hypr" {
+		switch opts.WorkspaceBackend {
+		case "hyprland":
 			workspaceBackend = hyprland.NewWorkspaceClient(opts.Logger)
+		case "sway":
+			workspaceBackend = sway.NewWorkspaceClient(opts.Logger)
+		default:
+			return fmt.Errorf("unknown workspace backend \"%s\"", opts.WorkspaceBackend)
 		}
 
 		toggle := toggling.Toggle{

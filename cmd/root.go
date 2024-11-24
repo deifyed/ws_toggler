@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+	"strings"
 
 	"github.com/deifyed/wstoggler/cmd/root"
 	"github.com/sirupsen/logrus"
@@ -24,7 +25,14 @@ var (
 )
 
 func init() {
-	rootCmd.Flags().StringVarP(&rootCmdOpts.WorkspaceBackend, "backend", "b", "sway", "Workspace backend to use (sway, hypr)")
+	defaultBackend, ok := os.LookupEnv("XDG_CURRENT_DESKTOP")
+	if !ok {
+		defaultBackend = "sway"
+	}
+
+	defaultBackend = strings.ToLower(defaultBackend)
+
+	rootCmd.Flags().StringVarP(&rootCmdOpts.WorkspaceBackend, "backend", "b", defaultBackend, "Workspace backend to use (sway, hyprland)")
 }
 
 func Execute() {
