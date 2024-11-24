@@ -29,7 +29,7 @@ func (c client) GetFocusedWorkspace() (string, error) {
 func (c client) SetFocusedWorkspace(target string) error {
 	c.logger.Debug(fmt.Sprintf("setting workspace to %s", target))
 
-	cmd := exec.Command("hyprctl", "keyword", "workspace", target)
+	cmd := exec.Command("hyprctl", "dispatch", "workspace", target)
 
 	err := cmd.Run()
 	if err != nil {
